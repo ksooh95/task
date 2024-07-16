@@ -3,35 +3,36 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-interface Images {
-    totalImg: number;
-    list: ImageItem[];
+interface Step1 {
+    onNext: () => void;
+    setDistributeImages: (images: number) => void;
 }
 
-interface ImageItem {
-    id: number;
-    url: string;
-}
-
-const Step1: React.FC = () => {
+const Step1: React.FC<Step1> = ({ onNext, setDistributeImages }) => {
     const [totalImages, setTotalImages] = useState<number>();
     const [percent, setPercent] = useState<number>(0);
-    const [distributeImage, setDistributeImage] = useState<number>();
+    const [localDistributeImage, setLocalDistributeImage] = useState<number>();
 
     useEffect(() => {
-        axios
-            .get('/api/images')
-            .then((res) => setTotalImages(res.data.totalImg)) // 응답 데이터로 상태 업데이트
-            .catch((err) => console.error('이미지 GET 에러 :', err)); // 오류 처리
+        const fetchTotalImages = async () => {
+            try {
+                const res = await axios.get('/api/mock-images');
+                setTotalImages(res.data);
+            } catch (error) {
+                console.error('error : ', error);
+            }
+        };
+
+        fetchTotalImages();
     }, []);
 
     console.log(totalImages);
 
-    const handleCalculate = () => {
-        const numDistributeImage = Math.floor((percent / 100) * totalImages);
-        setDistributeImage(numDistributeImage);
-        console.log('이미지 비율 계산한 값 : ', numDistributeImage);
-    };
+    useEffect(() => {
+        const numDistributeImage = Math.floor(totalImages * (percent / 100));
+        setLocalDistributeImage(numDistributeImage);
+        setDistributeImages(numDistributeImage);
+    }, [percent]);
 
     return (
         <div className="step">
@@ -48,19 +49,11 @@ const Step1: React.FC = () => {
                             }}
                             defaultValue={percent}
                         />
-                        <button
-                            type="button"
-                            onClick={() => {
-                                return handleCalculate();
-                            }}
-                        >
-                            확인
-                        </button>
                     </div>
                 </div>
                 <div className="btn_wrap">
                     <button type="button">이전</button>
-                    <button type="button">다음</button>
+                    <button onClick={onNext}>다음</button>
                 </div>
             </div>
         </div>

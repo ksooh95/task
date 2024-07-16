@@ -248,3 +248,45 @@ a:visited {
     background: #333;
     color: #fff;
 }
+
+.step .step_body b.check_mode_title {
+    margin-bottom: 15px;
+    display: block;
+}
+.step .step_body .check_mode {
+    display: flex;
+    align-items: center;
+    justify-content: normal;
+    gap: 16px;
+}
+.step .step_body input[type='radio'] {
+    position: fixed;
+    left: -9999px;
+}
+.step .step_body input[type='radio'] + label {
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+    border:1px solid #333;
+}
+.step .step_body input[type='radio']:checked + label {
+    display: block;
+    background: #7300f0;
+    width: fit-content;
+    color: #fff;
+}
+
+.task_mode_content .tmc_title {
+    display: block;
+    margin-top: 35px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.task_mode_content .tmc {
+    display: flex; align-items: center; justify-content: normal; margin-top: 10px;
+}
+.task_mode_content .tmc p {
+}
+.task_mode_content .tmc input {
+    border:1px solid #333; margin-left: 10px; padding: 10px 5px;
+}
